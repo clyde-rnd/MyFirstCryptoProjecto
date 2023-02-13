@@ -18,6 +18,8 @@ public class Crypto {
         put(29,'ы'); put(30,'ь'); put(31,'э'); put(32,'ю'); put(33,'я'); put(34,'.'); put(35,',');
         put(36,'"'); put(37,':'); put(38,';'); put(39,'-'); put(40,'!'); put(41,'?'); put(42,'%');
     }};
+
+
     private int key;
 
     public int getKey() {
@@ -29,15 +31,51 @@ public class Crypto {
     }
 
     private  int CheckKeySize (int keyInp){
+        int outKey;
        if (keyInp<=INPUT_CHAR_MAP.size()){
-           return keyInp;
+           outKey = keyInp;
        }else {
-           return keyInp%INPUT_CHAR_MAP.size();
+           outKey = keyInp%INPUT_CHAR_MAP.size();
+       }
+       if (outKey ==INPUT_CHAR_MAP.size()){
+           return outKey+1;
+       }else {
+           return outKey;
        }
     }
     public char CodChar (char inputChar){
-        boolean consistChar = Character.isUpperCase(inputChar);
-        int inpCharNum = INPUT_CHAR_MAP.get(Character.toLowerCase(inputChar));
-        return ' ';
+        boolean consistChar = Character.isUpperCase(inputChar); // upper or lower case state
+        int inpCharNum;
+        if (INPUT_CHAR_MAP.get(Character.toLowerCase(inputChar)) == null){
+            return inputChar;
+        }else {
+            inpCharNum = INPUT_CHAR_MAP.get(Character.toLowerCase(inputChar));
+        }
+        int outputCharNum = CheckKeySize(inpCharNum + key);
+        if (consistChar){
+           Character outChar = OUTPUT_CHAR_MAP.get(outputCharNum);
+           return Character.toUpperCase(outChar);
+        } else {
+            return OUTPUT_CHAR_MAP.get(outputCharNum);
+        }
+
+    }
+
+    public char DecodeChar (char inputChar){
+        boolean consistChar = Character.isUpperCase(inputChar); // upper or lower case state
+        int inpCharNum;
+        if (INPUT_CHAR_MAP.get(Character.toLowerCase(inputChar)) == null){
+            return inputChar;
+        }else {
+            inpCharNum = INPUT_CHAR_MAP.get(Character.toLowerCase(inputChar));
+        }
+        int outputCharNum = Math.abs(CheckKeySize(inpCharNum - key));
+        if (consistChar){
+            Character outChar = OUTPUT_CHAR_MAP.get(outputCharNum);
+            return Character.toUpperCase(outChar);
+        } else {
+            return OUTPUT_CHAR_MAP.get(outputCharNum);
+        }
+
     }
 }
