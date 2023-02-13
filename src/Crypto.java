@@ -19,31 +19,35 @@ public class Crypto {
         put(36,'"'); put(37,':'); put(38,';'); put(39,'-'); put(40,'!'); put(41,'?'); put(42,'%');
     }};
 
-
     private int key;
 
     public int getKey() {
         return key;
     }
 
+    /**
+     *
+     * @param key
+     */
     public void setKey(int key) {
-        this.key = CheckKeySize(key);
+        this.key = normolizeKey(key);
     }
 
-    private  int CheckKeySize (int keyInp){
+    private  int normolizeKey(int keyInp){
         int outKey;
        if (keyInp<=INPUT_CHAR_MAP.size()){
            outKey = keyInp;
        }else {
-           outKey = keyInp%INPUT_CHAR_MAP.size();
+           outKey = keyInp % INPUT_CHAR_MAP.size();
        }
        if (outKey ==INPUT_CHAR_MAP.size()){
-           return outKey+1;
+           return 1;
        }else {
            return outKey;
-       }
+      }
+//        return outKey;
     }
-    public char CodChar (char inputChar){
+    public char encodeChar(char inputChar){
         boolean consistChar = Character.isUpperCase(inputChar); // upper or lower case state
         int inpCharNum;
         if (INPUT_CHAR_MAP.get(Character.toLowerCase(inputChar)) == null){
@@ -51,17 +55,17 @@ public class Crypto {
         }else {
             inpCharNum = INPUT_CHAR_MAP.get(Character.toLowerCase(inputChar));
         }
-        int outputCharNum = CheckKeySize(inpCharNum + key);
+        int outputCharNum = normolizeKey((inpCharNum + key));
         if (consistChar){
            Character outChar = OUTPUT_CHAR_MAP.get(outputCharNum);
            return Character.toUpperCase(outChar);
         } else {
-            return OUTPUT_CHAR_MAP.get(outputCharNum);
+            Character outChar = OUTPUT_CHAR_MAP.get(outputCharNum);
+            return outChar;
         }
-
     }
 
-    public char DecodeChar (char inputChar){
+    public char decodeChar(char inputChar){
         boolean consistChar = Character.isUpperCase(inputChar); // upper or lower case state
         int inpCharNum;
         if (INPUT_CHAR_MAP.get(Character.toLowerCase(inputChar)) == null){
@@ -69,13 +73,12 @@ public class Crypto {
         }else {
             inpCharNum = INPUT_CHAR_MAP.get(Character.toLowerCase(inputChar));
         }
-        int outputCharNum = Math.abs(CheckKeySize(inpCharNum - key));
+        int outputCharNum = normolizeKey(inpCharNum - key + INPUT_CHAR_MAP.size());
         if (consistChar){
             Character outChar = OUTPUT_CHAR_MAP.get(outputCharNum);
             return Character.toUpperCase(outChar);
         } else {
             return OUTPUT_CHAR_MAP.get(outputCharNum);
         }
-
     }
 }
