@@ -11,9 +11,9 @@ public class Main {
         int sw = encodeDecodeSwitch();
         keyReader(crypto);
         System.out.println("Input the path to the file to read");
-        Path pathInpFile = readPath();
+        Path pathInpFile = inputFilePath();
         System.out.println("Input the path to the file to write");
-        Path pathOutFile = readPath();
+        Path pathOutFile = outputFilePath();
         if (sw==1){
             encodeFile(pathInpFile,pathOutFile,crypto);
         }else {
@@ -50,7 +50,7 @@ public class Main {
         }
     }
 
-    private static Path readPath(){
+    private static Path inputFilePath(){
         String inputPath;
         while (true) {
             System.out.print("Pleas input Path: ");
@@ -59,7 +59,27 @@ public class Main {
             if (Files.exists(path)) {
                 return path;
             } else {
-                System.out.println("Not Path please replace!");
+                System.out.println("Not valid Path please replace!");
+            }
+        }
+    }
+
+    private static Path outputFilePath()  {
+        String inputPath;
+        while (true) {
+            System.out.print("Pleas input Path: ");
+            inputPath = scanner.nextLine();
+            Path path = Path.of(inputPath);
+            if (Files.exists(path)) {
+                return path;
+            } else {
+                System.out.println("Not valid Path create file...!");
+                try {
+                   return Files.createFile(path);
+                }catch (IOException e){
+                    System.out.println("Not valid Path create file...!");
+                }
+
             }
         }
     }
