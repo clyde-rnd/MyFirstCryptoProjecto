@@ -95,7 +95,6 @@ public class Main {
             throw new RuntimeException(e);
         }
     }
-
     public static void decodeFile (Path pathInpFile, Path pathOutFile, Crypto crypto){
         try (BufferedReader bufferedReader = Files.newBufferedReader(pathInpFile);
              BufferedWriter bufferedWriter = Files.newBufferedWriter(pathOutFile) ){
