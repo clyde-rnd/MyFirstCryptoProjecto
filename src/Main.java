@@ -1,6 +1,9 @@
 import java.io.*;
+import java.lang.reflect.Array;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class Main {
@@ -9,15 +12,20 @@ public class Main {
     public static void main(String[] args) {
         Crypto crypto = new Crypto();
         int sw = encodeDecodeSwitch();
-        keyReader(crypto);
-        System.out.println("Input the path to the file to read");
-        Path pathInpFile = inputFilePath();
-        System.out.println("Input the path to the file to write");
-        Path pathOutFile = outputFilePath();
         if (sw==1){
+            Path pathInpFile = inputFilePath();
+            Path pathOutFile = outputFilePath();
+            keyReader(crypto);
             encodeFile(pathInpFile,pathOutFile,crypto);
-        }else {
+        }else if(sw==2) {
+            Path pathInpFile = inputFilePath();
+            Path pathOutFile = outputFilePath();
+            keyReader(crypto);
             decodeFile(pathInpFile,pathOutFile,crypto);
+        }else {
+            Path pathInpFile = inputFilePath();
+            Path pathOutFile = outputFilePath();
+            bruteForse(pathInpFile,pathOutFile,crypto);
         }
     }
 
@@ -39,9 +47,9 @@ public class Main {
     private static int encodeDecodeSwitch(){
         String inputStringKey;
         while (true) {
-            System.out.print("Input \"1\" for encode or   \"2\" for decode: ");
+            System.out.print("Input \"1\" for encode, \"2\" for decode or \"3\" for bruteForse: ");
             inputStringKey = scanner.nextLine();
-            String regex = "[1-2]";
+            String regex = "[1-3]";
             if (inputStringKey.matches(regex)) {
                 return Integer.parseInt(inputStringKey);
             } else {
@@ -51,6 +59,7 @@ public class Main {
     }
 
     private static Path inputFilePath(){
+        System.out.println("Input the path to the file to read");
         String inputPath;
         while (true) {
             System.out.print("Pleas input Path: ");
@@ -65,6 +74,7 @@ public class Main {
     }
 
     private static Path outputFilePath()  {
+        System.out.println("Input the path to the file to write");
         String inputPath;
         while (true) {
             System.out.print("Pleas input Path: ");
@@ -105,5 +115,64 @@ public class Main {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static void bruteForse (Path pathInpFile, Path pathOutFile, Crypto crypto){
+        ArrayList<Integer> numberOfCoincidences = new ArrayList<Integer>();
+        int totalCout=0;
+        int coutChar=0;
+        int coutCharO=0;
+        for (int i = 1; i <= Crypto.kyeSize ; i++) {
+            crypto.setKey(i);
+            decodeFile(pathInpFile, pathOutFile, crypto);
+            try (BufferedReader bufferedReader = Files.newBufferedReader(pathOutFile)){
+                String line;
+                totalCout=0;
+                coutChar=0;
+                coutCharO=0;
+                while ((line = bufferedReader.readLine()) != null) {
+                    char[] charBuf = line.toCharArray();
+                    totalCout=totalCout + (charBuf.length+1);
+                    for (int j = 0; j < charBuf.length; j++) {
+                        if(charBuf[j] == ' '){
+                            coutChar++;
+                        }
+                    }
+                    for (int j = 0; j < charBuf.length; j++) {
+                        if(charBuf[j] == 'о' || charBuf[j] == 'О'){
+                            coutCharO++;
+                        }
+                    }
+                 }
+
+
+//                while ((line = bufferedReader.readLine()) != null) {
+//                    String [] strBuf = line.split(" ");
+//                    System.out.println(Arrays.toString(strBuf));
+//                    for (int j = 0; j < strBuf.length; j++) {
+//                        if (strBuf[j].endsWith(".")||strBuf[j].endsWith(",")||strBuf[j].endsWith("!")||
+//                                strBuf[j].endsWith("?")||strBuf[j].endsWith(":")||strBuf[j].endsWith(";")){
+//                            cout++;
+//
+//                        }
+//                    }
+//                }
+
+                numberOfCoincidences.add((coutCharO*100)/totalCout);
+
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            if (((coutChar*100)/totalCout)>9 && ((coutCharO*100)/totalCout)>4 && ((coutCharO*100)/totalCout)<20 &&
+                    ((coutChar*100)/totalCout)<25 ){
+                System.out.println(crypto.getKey());
+                System.out.println((coutChar*100)/totalCout);
+                System.out.println((coutCharO*100)/totalCout);
+            }
+        }
+
+        System.out.println(numberOfCoincidences.toString());
+
+
     }
 }
