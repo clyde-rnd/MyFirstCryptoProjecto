@@ -1,7 +1,10 @@
 import java.io.*;
 import java.lang.reflect.Array;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
@@ -24,8 +27,15 @@ public class Main {
             decodeFile(pathInpFile,pathOutFile,crypto);
         }else {
             Path pathInpFile = inputFilePath();
-            Path pathOutFile = outputFilePath();
-            bruteForse(pathInpFile,pathOutFile,crypto);
+            Path pathOutFile = null;
+            try {
+                pathOutFile = tempFile(pathInpFile);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            System.out.println(pathInpFile);
+            System.out.println(pathOutFile);
+            bruteForse(pathInpFile, pathOutFile, crypto);
         }
     }
 
@@ -94,9 +104,24 @@ public class Main {
         }
     }
 
+    private static Path tempFile(Path inputFile) throws IOException {
+        Path nameTmp = Path.of("tmp.txt");
+        System.out.println(inputFile.getParent());
+        System.out.println(nameTmp);
+        Path path = inputFile.getParent().resolve(nameTmp);
+        System.out.println(path);
+        if (Files.exists(path)) {
+            return path;
+        } else {
+            System.out.println("Not valid Path create file...!");
+            return Files.createFile(path);
+
+            }
+    }
+
     private static void encodeFile (Path pathInpFile,Path pathOutFile, Crypto crypto){
-        try (BufferedReader bufferedReader = Files.newBufferedReader(pathInpFile);
-             BufferedWriter bufferedWriter = Files.newBufferedWriter(pathOutFile)){
+        try (BufferedReader bufferedReader = Files.newBufferedReader(pathInpFile, StandardCharsets.UTF_8);
+             BufferedWriter bufferedWriter = Files.newBufferedWriter(pathOutFile, StandardCharsets.UTF_8)){
             int symbol;
             while((symbol=bufferedReader.read())!=-1){
                 bufferedWriter.write(crypto.encodeChar((char) symbol));
@@ -106,8 +131,8 @@ public class Main {
         }
     }
     public static void decodeFile (Path pathInpFile, Path pathOutFile, Crypto crypto){
-        try (BufferedReader bufferedReader = Files.newBufferedReader(pathInpFile);
-             BufferedWriter bufferedWriter = Files.newBufferedWriter(pathOutFile) ){
+        try (BufferedReader bufferedReader = Files.newBufferedReader(pathInpFile, StandardCharsets.UTF_8);
+             BufferedWriter bufferedWriter = Files.newBufferedWriter(pathOutFile, StandardCharsets.UTF_8)){
             int symbol;
             while((symbol=bufferedReader.read())!=-1){
                 bufferedWriter.write(crypto.decodeChar((char) symbol));
@@ -125,7 +150,7 @@ public class Main {
         for (int i = 1; i <= Crypto.kyeSize ; i++) {
             crypto.setKey(i);
             decodeFile(pathInpFile, pathOutFile, crypto);
-            try (BufferedReader bufferedReader = Files.newBufferedReader(pathOutFile)){
+            try (BufferedReader bufferedReader = Files.newBufferedReader(pathOutFile, StandardCharsets.UTF_8)){
                 String line;
                 totalCout=0;
                 coutChar=0;
@@ -136,35 +161,21 @@ public class Main {
                     for (int j = 0; j < charBuf.length; j++) {
                         if(charBuf[j] == ' '){
                             coutChar++;
-                        }
-                    }
-                    for (int j = 0; j < charBuf.length; j++) {
-                        if(charBuf[j] == 'о' || charBuf[j] == 'О'){
+                        } else if (charBuf[j] == 'о' || charBuf[j] == 'О') {
                             coutCharO++;
                         }
                     }
                  }
 
-
-//                while ((line = bufferedReader.readLine()) != null) {
-//                    String [] strBuf = line.split(" ");
-//                    System.out.println(Arrays.toString(strBuf));
-//                    for (int j = 0; j < strBuf.length; j++) {
-//                        if (strBuf[j].endsWith(".")||strBuf[j].endsWith(",")||strBuf[j].endsWith("!")||
-//                                strBuf[j].endsWith("?")||strBuf[j].endsWith(":")||strBuf[j].endsWith(";")){
-//                            cout++;
-//
-//                        }
-//                    }
-//                }
-
-                numberOfCoincidences.add((coutCharO*100)/totalCout);
-
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            if (((coutChar*100)/totalCout)>9 && ((coutCharO*100)/totalCout)>4 && ((coutCharO*100)/totalCout)<20 &&
-                    ((coutChar*100)/totalCout)<25 ){
+            numberOfCoincidences.add((coutCharO*100)/totalCout);
+//            System.out.println((coutChar*100)/totalCout);
+//            System.out.println((coutCharO*100)/totalCout);
+//            System.out.println(crypto.getKey());
+            if (((coutChar*100)/totalCout)>9 && ((coutCharO*100)/totalCout)>4 && ((coutCharO*100)/totalCout)<70 &&
+                    ((coutChar*100)/totalCout)<70 ){
                 System.out.println(crypto.getKey());
                 System.out.println((coutChar*100)/totalCout);
                 System.out.println((coutCharO*100)/totalCout);
