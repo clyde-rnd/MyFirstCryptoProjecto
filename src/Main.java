@@ -33,8 +33,6 @@ public class Main {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            System.out.println(pathInpFile);
-            System.out.println(pathOutFile);
             bruteForse(pathInpFile, pathOutFile, crypto);
         }
     }
@@ -106,8 +104,6 @@ public class Main {
 
     private static Path tempFile(Path inputFile) throws IOException {
         Path nameTmp = Path.of("tmp.txt");
-        System.out.println(inputFile.getParent());
-        System.out.println(nameTmp);
         Path path = inputFile.getParent().resolve(nameTmp);
         System.out.println(path);
         if (Files.exists(path)) {
@@ -142,7 +138,7 @@ public class Main {
         }
     }
 
-    public static void bruteForse (Path pathInpFile, Path pathOutFile, Crypto crypto){
+    public static void bruteForse (Path pathInpFile, Path pathOutFile, Crypto crypto)  {
         ArrayList<Integer> numberOfCoincidences = new ArrayList<Integer>();
         int totalCout=0;
         int coutChar=0;
@@ -171,17 +167,18 @@ public class Main {
                 throw new RuntimeException(e);
             }
             numberOfCoincidences.add((coutCharO*100)/totalCout);
-//            System.out.println((coutChar*100)/totalCout);
-//            System.out.println((coutCharO*100)/totalCout);
-//            System.out.println(crypto.getKey());
             if (((coutChar*100)/totalCout)>9 && ((coutCharO*100)/totalCout)>4 && ((coutCharO*100)/totalCout)<70 &&
                     ((coutChar*100)/totalCout)<70 ){
-                System.out.println(crypto.getKey());
-                System.out.println((coutChar*100)/totalCout);
-                System.out.println((coutCharO*100)/totalCout);
+                System.out.println("Probability KEY - "+crypto.getKey());
+                System.out.println("Probability show \" \" - "+(coutChar*100)/totalCout + "%");
+                System.out.println("Probability show \"O or o\" - "+(coutCharO*100)/totalCout+ "%");
             }
         }
-
+        try {
+            Files.delete(pathOutFile);
+        }catch (IOException e){
+            throw new RuntimeException(e);
+        }
         System.out.println(numberOfCoincidences.toString());
 
 
