@@ -1,7 +1,7 @@
 import java.util.HashMap;
 import java.util.Map;
 
-public class Crypto {
+public class CharCrypto {
     private static final Map<Character,Integer> INPUT_CHAR_MAP = new HashMap<>() {{
         put('а',1);  put('б',2);  put('в',3);  put('г',4);  put('д',5);  put('е',6);  put('ё',7);
         put('ж',8);  put('з',9);  put('и',10); put('й',11); put('к',12); put('л',13); put('м',14);
