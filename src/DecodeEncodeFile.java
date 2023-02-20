@@ -30,11 +30,12 @@ public class DecodeEncodeFile {
         }
     }
 
-    public static void bruteForce(Path pathInpFile, Path pathOutFile, CharCrypto charCrypto)  {
+    public static int bruteForce(Path pathInpFile, Path pathOutFile, CharCrypto charCrypto)  {
         ArrayList<Integer> numberOfCoincidences = new ArrayList<>();
         int totalCout=0;
         int coutChar=0;
         int coutCharO=0;
+        int returnKey=0;
         for (int i = 1; i <= CharCrypto.kyeSize ; i++) {
             charCrypto.setKey(i);
             decodeFile(pathInpFile, pathOutFile, charCrypto);
@@ -64,6 +65,7 @@ public class DecodeEncodeFile {
                 System.out.println("Probability KEY - "+ charCrypto.getKey());
                 System.out.println("Probability show \" \" - "+(coutChar*100)/totalCout + "%");
                 System.out.println("Probability show \"O or o\" - "+(coutCharO*100)/totalCout+ "%");
+                returnKey = charCrypto.getKey();
             }
         }
         try {
@@ -72,6 +74,7 @@ public class DecodeEncodeFile {
             throw new RuntimeException(e);
         }
         System.out.println(numberOfCoincidences.toString());
+        return returnKey;
 
 
     }
