@@ -114,15 +114,24 @@ public class CaesarGUI extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (Encode.isSelected()){
-                    keyVal = Integer.parseInt(inputKey.getText());
-                    CharCrypto newCrypt = new CharCrypto();
-                    newCrypt.setKey(keyVal);
-                   DecodeEncodeFile.encodeFile(inputPath,outputPath, newCrypt);
+                    if (Validator.keyReaderGUI(inputKey.getText())){
+                        keyVal = Integer.parseInt(inputKey.getText());
+                        CharCrypto newCrypt = new CharCrypto();
+                        newCrypt.setKey(keyVal);
+                        DecodeEncodeFile.encodeFile(inputPath,outputPath, newCrypt);
+                    }else {
+                        inputKey.setText("Not Valid KEY");
+                    }
+
                 } else if (Decode.isSelected()){
-                    keyVal = Integer.parseInt(inputKey.getText());
-                    CharCrypto newCrypt = new CharCrypto();
-                    newCrypt.setKey(keyVal);
-                    DecodeEncodeFile.decodeFile(inputPath,outputPath, newCrypt);
+                    if (Validator.keyReaderGUI(inputKey.getText())){
+                        keyVal = Integer.parseInt(inputKey.getText());
+                        CharCrypto newCrypt = new CharCrypto();
+                        newCrypt.setKey(keyVal);
+                        DecodeEncodeFile.decodeFile(inputPath,outputPath, newCrypt);
+                    }else {
+                        inputKey.setText("Not Valid KEY");
+                    }
 
                 } else if (BrutForce.isSelected()) {
                     outputPath = null;

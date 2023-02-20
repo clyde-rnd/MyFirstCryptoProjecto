@@ -6,7 +6,7 @@ import java.util.Scanner;
 public class Validator {
     private static Scanner scanner = new Scanner(System.in);
 
-    public static void keyReader(CharCrypto charCrypto){
+    public static void keyReaderConsole(CharCrypto charCrypto){
         String inputStringKey;
         while (true) {
             System.out.print("Pleas input integer crypto key: ");
@@ -20,6 +20,16 @@ public class Validator {
         }
         charCrypto.setKey(Integer.parseInt(inputStringKey));
     }
+
+    public static boolean keyReaderGUI(String string){
+            String regex = "\\d+";
+            if (string.matches(regex) && Integer.parseInt(string)>0 && Integer.parseInt(string)<75) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
 
     public static int encodeDecodeSwitch(){
         String inputStringKey;

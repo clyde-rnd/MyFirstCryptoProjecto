@@ -9,12 +9,12 @@ public class StartConsole {
         if (sw==1){
             Path pathInpFile = Validator.inputFilePath();
             Path pathOutFile = Validator.outputFilePath();
-            Validator.keyReader(charCrypto);
+            Validator.keyReaderConsole(charCrypto);
             DecodeEncodeFile.encodeFile(pathInpFile,pathOutFile, charCrypto);
         }else if(sw==2) {
             Path pathInpFile = Validator.inputFilePath();
             Path pathOutFile = Validator.outputFilePath();
-            Validator.keyReader(charCrypto);
+            Validator.keyReaderConsole(charCrypto);
             DecodeEncodeFile.decodeFile(pathInpFile,pathOutFile, charCrypto);
         }else {
             Path pathInpFile = Validator.inputFilePath();
