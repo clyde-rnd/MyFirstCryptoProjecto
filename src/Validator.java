@@ -109,4 +109,14 @@ public class Validator {
         }
     }
 
+    public static  int normolizeKey(int keyInp){
+        int outKey;
+        if (keyInp<=CharCrypto.kyeSize){
+            outKey = keyInp;
+        }else {
+            outKey = keyInp % CharCrypto.kyeSize;
+        }
+        return outKey;
+    }
+
 }

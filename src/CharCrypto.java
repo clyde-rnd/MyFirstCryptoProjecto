@@ -43,46 +43,42 @@ public class CharCrypto {
         put(84,'7'); put(85,'8'); put(86,'9');
     }};
     public static int kyeSize = INPUT_CHAR_MAP.size();
-    private int key;
+    private int key;  //contains CryptoKey
 
     public int getKey() {
         return key;
     }
 
     /**
+     * add Crypto Key in variable key
      *
-     * @param key
      */
     public void setKey(int key) {
-        int inKey = normolizeKey(key);
-        if (inKey ==INPUT_CHAR_MAP.size()){
+        int inKey = Validator.normolizeKey(key);
+        if (inKey ==kyeSize){
             this.key = inKey-1;
         }else {
             this.key = inKey;
        }
     }
-
-    private  int normolizeKey(int keyInp){
-        int outKey;
-        if (keyInp<=INPUT_CHAR_MAP.size()){
-            outKey = keyInp;
-        }else {
-            outKey = keyInp % INPUT_CHAR_MAP.size();
-        }
-
-         return outKey;
-    }
+    /**
+     * Encode char method
+     *
+     */
     public char encodeChar(char inputChar){
         int inpCharNum;
-        if (INPUT_CHAR_MAP.get(inputChar) == null){
+        if (INPUT_CHAR_MAP.get(inputChar) == null){ //if char no in MAP. skip this char
             return inputChar;
         }else {
             inpCharNum = INPUT_CHAR_MAP.get(inputChar);
         }
-        int outputCharNum = normolizeKey((inpCharNum + key));
+        int outputCharNum = Validator.normolizeKey((inpCharNum + key));
         return  OUTPUT_CHAR_MAP.get(outputCharNum);
     }
-
+    /**
+     * Decode char method
+     *
+     */
     public char decodeChar(char inputChar){
         int inpCharNum;
         if (INPUT_CHAR_MAP.get(inputChar) == null){
@@ -90,7 +86,7 @@ public class CharCrypto {
         }else {
             inpCharNum = INPUT_CHAR_MAP.get(inputChar);
         }
-        int outputCharNum = normolizeKey(inpCharNum - key + INPUT_CHAR_MAP.size());
+        int outputCharNum = Validator.normolizeKey(inpCharNum - key + kyeSize);
         return OUTPUT_CHAR_MAP.get(outputCharNum);
     }
 }

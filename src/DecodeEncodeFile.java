@@ -42,32 +42,32 @@ public class DecodeEncodeFile {
 
     /**
      *
-     * bruteForce - decode input file analyzes the probability of char in text chat ' ' and 'o' or 'O'
-     * average statistic symbol ' ' in text 16%
-     * average statistic symbol 'o' or 'O' in text 9%
+     * bruteForce - decode input file analyzes the probability of char in text, chat ' ' and char 'o' or 'O'
+     * average statistic contains symbol ' ' in text 16%
+     * average statistic contains symbol 'o' or 'O' in text 9%
      */
 
     public static int bruteForce(Path pathInpFile, Path pathOutFile, CharCrypto charCrypto)  {
-        int totalCout=0;
-        int coutChar=0;
-        int coutCharO=0;
+        int totalCharInText=0;
+        int countChar_;
+        int countCharOo;
         int returnKey=0;
         for (int i = 1; i <= CharCrypto.kyeSize ; i++) {
             charCrypto.setKey(i);
             decodeFile(pathInpFile, pathOutFile, charCrypto);
             try (BufferedReader bufferedReader = Files.newBufferedReader(pathOutFile, StandardCharsets.UTF_8)){
                 String line;
-                totalCout=0;
-                coutChar=0;
-                coutCharO=0;
+                totalCharInText=0;
+                countChar_=0;
+                countCharOo=0;
                 while ((line = bufferedReader.readLine()) != null) {
                     char[] charBuf = line.toCharArray();
-                    totalCout=totalCout + (charBuf.length+1);
+                    totalCharInText=totalCharInText + (charBuf.length+1);
                     for (int j = 0; j < charBuf.length; j++) {
                         if(charBuf[j] == ' '){
-                            coutChar++;
+                            countChar_++;
                         } else if (charBuf[j] == 'о' || charBuf[j] == 'О') {
-                            coutCharO++;
+                            countCharOo++;
                         }
                     }
                 }
@@ -76,11 +76,11 @@ public class DecodeEncodeFile {
                 throw new RuntimeException(e);
             }
 
-            if (((coutChar*100)/totalCout)>9 && ((coutCharO*100)/totalCout)>4 && ((coutCharO*100)/totalCout)<70 &&
-                    ((coutChar*100)/totalCout)<70 ){
+            if (((countChar_*100)/totalCharInText)>9 && ((countCharOo*100)/totalCharInText)>4 && ((countCharOo*100)/totalCharInText)<70 &&
+                    ((countChar_*100)/totalCharInText)<70 ){
                 System.out.println("Probability KEY - "+ charCrypto.getKey());
-                System.out.println("Probability show \" \" - "+(coutChar*100)/totalCout + "%");
-                System.out.println("Probability show \"O or o\" - "+(coutCharO*100)/totalCout+ "%");
+                System.out.println("Probability show \" \" - "+(countChar_*100)/totalCharInText + "%");
+                System.out.println("Probability show \"O or o\" - "+(countCharOo*100)/totalCharInText+ "%");
                 returnKey = charCrypto.getKey();
                 try {
                     Files.delete(pathOutFile); //delete tmp file

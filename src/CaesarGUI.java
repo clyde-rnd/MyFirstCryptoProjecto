@@ -50,17 +50,17 @@ public class CaesarGUI extends JFrame{
          */
         ButtonGroup buttonGroup = new ButtonGroup();
         JPanel panelRadioButtons = new JPanel(new GridLayout(0, 3, 1, 1));
-        JRadioButton Encode = new JRadioButton("Encode", true);
-        JRadioButton Decode = new JRadioButton("Decode");
-        JRadioButton BrutForce = new JRadioButton("BrutForce");
+        JRadioButton encode = new JRadioButton("Encode", true);
+        JRadioButton decode = new JRadioButton("Decode");
+        JRadioButton brutForce = new JRadioButton("BrutForce");
 
-        panelRadioButtons.add(Encode);
-        panelRadioButtons.add(Decode);
-        panelRadioButtons.add(BrutForce);
+        panelRadioButtons.add(encode);
+        panelRadioButtons.add(decode);
+        panelRadioButtons.add(brutForce);
 
-        buttonGroup.add(Encode);
-        buttonGroup.add(Decode);
-        buttonGroup.add(BrutForce);
+        buttonGroup.add(encode);
+        buttonGroup.add(decode);
+        buttonGroup.add(brutForce);
 
         /**
          * Listener Radio Button
@@ -68,19 +68,19 @@ public class CaesarGUI extends JFrame{
        ActionListener radioButton = new ActionListener() {
            @Override
            public void actionPerformed(ActionEvent e) {
-               if(Encode.isSelected()){
+               if(encode.isSelected()){
                    frameMainWindow.remove(panelLabelKey);
                    frameMainWindow.add(panelInputKey);
                    frameMainWindow.add(panelInputFile);
                    frameMainWindow.add(panelOutputFile);
                    frameMainWindow.add(start);
-               }else if (Decode.isSelected()){
+               }else if (decode.isSelected()){
                    frameMainWindow.remove(panelLabelKey);
                    frameMainWindow.add(panelInputKey);
                    frameMainWindow.add(panelInputFile);
                    frameMainWindow.add(panelOutputFile);
                    frameMainWindow.add(start);
-               } else if (BrutForce.isSelected()) {
+               } else if (brutForce.isSelected()) {
                    frameMainWindow.remove(panelInputKey);
                    frameMainWindow.add(panelInputFile);
                    frameMainWindow.remove(panelOutputFile);
@@ -91,9 +91,9 @@ public class CaesarGUI extends JFrame{
            }
        };
 
-        Encode.addActionListener(radioButton);
-        Decode.addActionListener(radioButton);
-        BrutForce.addActionListener(radioButton);
+        encode.addActionListener(radioButton);
+        decode.addActionListener(radioButton);
+        brutForce.addActionListener(radioButton);
 
         /**
          * Listener Input Path Button
@@ -135,7 +135,7 @@ public class CaesarGUI extends JFrame{
         start.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (Encode.isSelected()) {
+                if (encode.isSelected()) {
                     if (Validator.keyReaderGUI(inputKey.getText())) {
                         keyVal = Integer.parseInt(inputKey.getText());
                         CharCrypto newCrypt = new CharCrypto();
@@ -151,7 +151,7 @@ public class CaesarGUI extends JFrame{
                         inputKey.setText("Not Valid KEY");
                     }
 
-                } else if (Decode.isSelected()) {
+                } else if (decode.isSelected()) {
                     if (Validator.keyReaderGUI(inputKey.getText())) {
                         keyVal = Integer.parseInt(inputKey.getText());
                         CharCrypto newCrypt = new CharCrypto();
@@ -167,7 +167,7 @@ public class CaesarGUI extends JFrame{
                         inputKey.setText("Not Valid KEY");
                     }
 
-                } else if (BrutForce.isSelected()) {
+                } else if (brutForce.isSelected()) {
                     outputPath = null;
                     if (Validator.validatorPathGUI(inputPath)) {
                         CharCrypto newCrypt = new CharCrypto();
@@ -194,7 +194,7 @@ public class CaesarGUI extends JFrame{
          * add button and label on Main Window
          */
         frameMainWindow.add(panelRadioButtons);
-        if(Encode.isSelected()){
+        if(encode.isSelected()){
             frameMainWindow.add(panelInputKey);
             frameMainWindow.add(panelInputFile);
             frameMainWindow.add(panelOutputFile);
