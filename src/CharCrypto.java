@@ -2,6 +2,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class CharCrypto {
+
+    /**
+     * OUTPUT_CHAR_MAP for quick search number by char
+     */
     private static final Map<Character,Integer> INPUT_CHAR_MAP = new HashMap<>() {{
         put('а',1);  put('б',2);  put('в',3);  put('г',4);  put('д',5);  put('е',6);  put('ё',7);
         put('ж',8);  put('з',9);  put('и',10); put('й',11); put('к',12); put('л',13); put('м',14);
@@ -15,7 +19,13 @@ public class CharCrypto {
         put('Ы',62); put('Ь',63); put('Э',64); put('Ю',65); put('Я',66);
         put('.',67); put(',',68); put('"',69); put(':',70); put(';',71); put('-',72); put('!',73);
         put('?',74); put('%',75); put(' ',76);
+        put('0',77); put('1',78); put('2',79); put('3',80); put('4',81); put('5',82); put('6',83);
+        put('7',84); put('8',85);  put('9',86);
     }};
+
+    /**
+     * OUTPUT_CHAR_MAP for quick search char by number
+     */
     private static final Map<Integer,Character> OUTPUT_CHAR_MAP = new HashMap<>() {{
         put(1,'а');  put(2,'б');  put(3,'в');  put(4,'г');  put(5,'д');  put(6,'е');  put(7,'ё');
         put(8,'ж');  put(9,'з');  put(10,'и'); put(11,'й'); put(12,'к'); put(13,'л'); put(14,'м');
@@ -29,6 +39,8 @@ public class CharCrypto {
         put(62,'Ы'); put(63,'Ь'); put(64,'Э'); put(65,'Ю'); put(66,'Я');
         put(67,'.'); put(68,','); put(69,'"'); put(70,':'); put(71,';'); put(72,'-'); put(73,'!');
         put(74,'?'); put(75,'%'); put(76,' ');
+        put(77,'0'); put(78,'1'); put(79,'2'); put(80,'3'); put(81,'4'); put(82,'5'); put(83,'6');
+        put(84,'7'); put(85,'8'); put(86,'9');
     }};
     public static int kyeSize = INPUT_CHAR_MAP.size();
     private int key;

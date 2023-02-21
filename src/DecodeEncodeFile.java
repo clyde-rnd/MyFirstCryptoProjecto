@@ -7,6 +7,10 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 
 public class DecodeEncodeFile {
+    /**
+     *
+     *encodeFile - encode input file in output file
+     */
     public static void encodeFile (Path pathInpFile, Path pathOutFile, CharCrypto charCrypto){
         try (BufferedReader bufferedReader = Files.newBufferedReader(pathInpFile, StandardCharsets.UTF_8);
              BufferedWriter bufferedWriter = Files.newBufferedWriter(pathOutFile, StandardCharsets.UTF_8)){
@@ -18,6 +22,12 @@ public class DecodeEncodeFile {
             throw new RuntimeException(e);
         }
     }
+
+    /**
+     *
+     *decodeFile - decode input file in output file
+     */
+
     public static void decodeFile (Path pathInpFile, Path pathOutFile, CharCrypto charCrypto){
         try (BufferedReader bufferedReader = Files.newBufferedReader(pathInpFile, StandardCharsets.UTF_8);
              BufferedWriter bufferedWriter = Files.newBufferedWriter(pathOutFile, StandardCharsets.UTF_8)){
@@ -30,8 +40,14 @@ public class DecodeEncodeFile {
         }
     }
 
+    /**
+     *
+     * bruteForce - decode input file analyzes the probability of char in text chat ' ' and 'o' or 'O'
+     * average statistic symbol ' ' in text 16%
+     * average statistic symbol 'o' or 'O' in text 9%
+     */
+
     public static int bruteForce(Path pathInpFile, Path pathOutFile, CharCrypto charCrypto)  {
-        ArrayList<Integer> numberOfCoincidences = new ArrayList<>();
         int totalCout=0;
         int coutChar=0;
         int coutCharO=0;
@@ -59,23 +75,27 @@ public class DecodeEncodeFile {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            numberOfCoincidences.add((coutCharO*100)/totalCout);
+
             if (((coutChar*100)/totalCout)>9 && ((coutCharO*100)/totalCout)>4 && ((coutCharO*100)/totalCout)<70 &&
                     ((coutChar*100)/totalCout)<70 ){
                 System.out.println("Probability KEY - "+ charCrypto.getKey());
                 System.out.println("Probability show \" \" - "+(coutChar*100)/totalCout + "%");
                 System.out.println("Probability show \"O or o\" - "+(coutCharO*100)/totalCout+ "%");
                 returnKey = charCrypto.getKey();
+                try {
+                    Files.delete(pathOutFile); //delete tmp file
+                }catch (IOException e){
+                    throw new RuntimeException(e);
+                }
+                return returnKey;
             }
         }
         try {
-            Files.delete(pathOutFile);
+            Files.delete(pathOutFile); //delete tmp file
         }catch (IOException e){
             throw new RuntimeException(e);
         }
-        System.out.println(numberOfCoincidences.toString());
         return returnKey;
-
 
     }
 }

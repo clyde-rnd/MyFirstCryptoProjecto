@@ -3,7 +3,9 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class CaesarGUI extends JFrame{
     private static int keyVal;
@@ -11,12 +13,18 @@ public class CaesarGUI extends JFrame{
     private static Path outputPath;
 
     CaesarGUI(){
+        /**
+         * Create main window
+         */
         JFrame frameMainWindow = new JFrame("Caesar  Cipher");
         frameMainWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frameMainWindow.setLocationRelativeTo(null);
         frameMainWindow.setResizable(true);
         frameMainWindow.setLayout(new GridLayout(5, 3, 1, 1));
 
+        /**
+         * Create Button and label
+         */
         JLabel labelKey = new JLabel();
         JPanel panelLabelKey = new JPanel(new GridLayout(1, 1, 1, 1));
         panelLabelKey.add(labelKey);
@@ -25,32 +33,39 @@ public class CaesarGUI extends JFrame{
         JPanel panelStart = new JPanel(new GridLayout(1, 1, 1, 1));
         panelStart.add(start);
 
-        JTextField inputKey = new JTextField("InputKey 1-75");
+        JTextField inputKey = new JTextField("InputKey 1-85");
         JPanel panelInputKey = new JPanel(new GridLayout(1, 1, 1, 1));
         panelInputKey .add(inputKey);
 
-        JButton addInputPath = new JButton("addInputFile");
+        JButton addInputPath = new JButton("add.. InputFile");
         JPanel panelInputFile = new JPanel(new GridLayout(1, 1, 1, 1));
         panelInputFile.add(addInputPath);
 
-        JButton addOutputPath = new JButton("addOutputFile");
+        JButton addOutputPath = new JButton("add.. OutputFile");
         JPanel panelOutputFile = new JPanel(new GridLayout(1, 1, 1, 1));
         panelOutputFile.add(addOutputPath);
 
+        /**
+         * Create Radio Button and add button on panel
+         */
         ButtonGroup buttonGroup = new ButtonGroup();
-        JPanel panelRadioBattons = new JPanel(new GridLayout(0, 3, 1, 1));
+        JPanel panelRadioButtons = new JPanel(new GridLayout(0, 3, 1, 1));
         JRadioButton Encode = new JRadioButton("Encode", true);
         JRadioButton Decode = new JRadioButton("Decode");
         JRadioButton BrutForce = new JRadioButton("BrutForce");
 
-        panelRadioBattons.add(Encode);
-        panelRadioBattons.add(Decode);
-        panelRadioBattons.add(BrutForce);
+        panelRadioButtons.add(Encode);
+        panelRadioButtons.add(Decode);
+        panelRadioButtons.add(BrutForce);
 
         buttonGroup.add(Encode);
         buttonGroup.add(Decode);
         buttonGroup.add(BrutForce);
-       ActionListener radioBatt = new ActionListener() {
+
+        /**
+         * Listener Radio Button
+         */
+       ActionListener radioButton = new ActionListener() {
            @Override
            public void actionPerformed(ActionEvent e) {
                if(Encode.isSelected()){
@@ -75,9 +90,14 @@ public class CaesarGUI extends JFrame{
                frameMainWindow.setVisible(true);
            }
        };
-        Encode.addActionListener(radioBatt);
-        Decode.addActionListener(radioBatt);
-        BrutForce.addActionListener(radioBatt);
+
+        Encode.addActionListener(radioButton);
+        Decode.addActionListener(radioButton);
+        BrutForce.addActionListener(radioButton);
+
+        /**
+         * Listener Input Path Button
+         */
         addInputPath.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -86,14 +106,15 @@ public class CaesarGUI extends JFrame{
                 int response = fileChooserIn.showOpenDialog(null);
                 if(response==JFileChooser.APPROVE_OPTION){
                     inputPath = Path.of(fileChooserIn.getSelectedFile().getPath());
-                    addInputPath.setText(String.valueOf(fileChooserIn.getSelectedFile())) ;
+                    addInputPath.setText(String.valueOf(fileChooserIn.getSelectedFile()));
                 }
                 frameMainWindow.pack();
                 frameMainWindow.setVisible(true);
-
             }
         });
-
+/**
+ * Listener Output Path Button
+ */
         addOutputPath.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -102,58 +123,77 @@ public class CaesarGUI extends JFrame{
                 int response = fileChooserOut.showOpenDialog(null);
                 if(response==JFileChooser.APPROVE_OPTION){
                     outputPath = Path.of(fileChooserOut.getSelectedFile().getPath());
-                   addOutputPath.setText(String.valueOf(fileChooserOut.getSelectedFile())) ;
+                   addOutputPath.setText(String.valueOf(fileChooserOut.getSelectedFile()));
                 }
                 frameMainWindow.pack();
                 frameMainWindow.setVisible(true);
-
             }
         });
-
+/**
+ * Listener Start Button
+ */
         start.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (Encode.isSelected()){
-                    if (Validator.keyReaderGUI(inputKey.getText())){
+                if (Encode.isSelected()) {
+                    if (Validator.keyReaderGUI(inputKey.getText())) {
                         keyVal = Integer.parseInt(inputKey.getText());
                         CharCrypto newCrypt = new CharCrypto();
                         newCrypt.setKey(keyVal);
-                        DecodeEncodeFile.encodeFile(inputPath,outputPath, newCrypt);
-                    }else {
+                        if (Validator.validatorPathGUI(inputPath) && Validator.validatorPathGUI(outputPath)) {
+                            DecodeEncodeFile.encodeFile(inputPath, outputPath, newCrypt);
+                            inputKey.setText("DONE!!!! You KEY " + newCrypt.getKey());
+                        } else {
+                            inputKey.setText("Input Correct Path");
+                        }
+
+                    } else {
                         inputKey.setText("Not Valid KEY");
                     }
 
-                } else if (Decode.isSelected()){
-                    if (Validator.keyReaderGUI(inputKey.getText())){
+                } else if (Decode.isSelected()) {
+                    if (Validator.keyReaderGUI(inputKey.getText())) {
                         keyVal = Integer.parseInt(inputKey.getText());
                         CharCrypto newCrypt = new CharCrypto();
                         newCrypt.setKey(keyVal);
-                        DecodeEncodeFile.decodeFile(inputPath,outputPath, newCrypt);
-                    }else {
+                        if (Validator.validatorPathGUI(inputPath) && Validator.validatorPathGUI(outputPath)) {
+                            DecodeEncodeFile.decodeFile(inputPath, outputPath, newCrypt);
+                            inputKey.setText("DONE!!!!");
+                        } else {
+                            inputKey.setText("Input Correct Path");
+                        }
+
+                    } else {
                         inputKey.setText("Not Valid KEY");
                     }
 
                 } else if (BrutForce.isSelected()) {
                     outputPath = null;
-                    CharCrypto newCrypt = new CharCrypto();
-                    try {
-                        outputPath = Validator.tempFile(inputPath);
-                    } catch (IOException ee) {
-                        throw new RuntimeException(ee);
+                    if (Validator.validatorPathGUI(inputPath)) {
+                        CharCrypto newCrypt = new CharCrypto();
+                        try {
+                            outputPath = Validator.tempFile(inputPath);
+                        } catch (IOException ee) {
+                            throw new RuntimeException(ee);
+                        }
+                        int keyShowLabel = DecodeEncodeFile.bruteForce(inputPath, outputPath, newCrypt);
+                        System.out.println(keyShowLabel);
+                        labelKey.setText("You key - " + (String.valueOf(keyShowLabel)));
+                        frameMainWindow.add(panelLabelKey);
+                    } else {
+                        addInputPath.setText("Not valid InPath");
                     }
-                    int keyShowLabel = DecodeEncodeFile.bruteForce(inputPath, outputPath, newCrypt );
-                    labelKey.setText("You key - " + (String.valueOf(keyShowLabel)));
-                    frameMainWindow.add(panelLabelKey);
+
+                    frameMainWindow.pack();
+                    frameMainWindow.setVisible(true);
 
                 }
-
-                frameMainWindow.pack();
-                frameMainWindow.setVisible(true);
-
             }
         });
-
-        frameMainWindow.add(panelRadioBattons);
+        /**
+         * add button and label on Main Window
+         */
+        frameMainWindow.add(panelRadioButtons);
         if(Encode.isSelected()){
             frameMainWindow.add(panelInputKey);
             frameMainWindow.add(panelInputFile);

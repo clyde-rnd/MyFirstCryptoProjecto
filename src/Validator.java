@@ -5,7 +5,10 @@ import java.util.Scanner;
 
 public class Validator {
     private static Scanner scanner = new Scanner(System.in);
-
+    /**
+     * keyReaderConsole for correct input crypto KEY  add valid KEY
+     *
+     */
     public static void keyReaderConsole(CharCrypto charCrypto){
         String inputStringKey;
         while (true) {
@@ -23,7 +26,7 @@ public class Validator {
 
     public static boolean keyReaderGUI(String string){
             String regex = "\\d+";
-            if (string.matches(regex) && Integer.parseInt(string)>0 && Integer.parseInt(string)<75) {
+            if (string.matches(regex) && Integer.parseInt(string)>0 && Integer.parseInt(string)<86) {
                 return true;
             } else {
                 return false;
@@ -31,7 +34,7 @@ public class Validator {
         }
 
 
-    public static int encodeDecodeSwitch(){
+    public static int encodeDecodeSwitchConsole(){
         String inputStringKey;
         while (true) {
             System.out.print("Input \"1\" for encode, \"2\" for decode or \"3\" for bruteForse: ");
@@ -45,7 +48,7 @@ public class Validator {
         }
     }
 
-    public static Path inputFilePath(){
+    public static Path inputFilePathConsole(){
         System.out.println("Input the path to the file to read");
         String inputPath;
         while (true) {
@@ -60,7 +63,7 @@ public class Validator {
         }
     }
 
-    public static Path outputFilePath()  {
+    public static Path outputFilePathConsole()  {
         System.out.println("Input the path to the file to write");
         String inputPath;
         while (true) {
@@ -91,6 +94,18 @@ public class Validator {
             System.out.println("Not valid Path create file...!");
             return Files.createFile(path);
 
+        }
+    }
+
+    public static boolean validatorPathGUI (Path path){
+        if (path==null){
+            return false;
+        }else {
+            if (Files.exists(path)) {
+                return true;
+            } else {
+                return false;
+            }
         }
     }
 
